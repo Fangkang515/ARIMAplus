@@ -12,4 +12,4 @@ Entity fitness is based on RMSE of produced forecast.
 
 ###### Despite the project per se, second aim is to learn Python, thus avoiding importing external libraries wherever it can be.
 
-###### Yet, there is much to be done
+###### Yet, there is much to be done...
