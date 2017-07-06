@@ -7,6 +7,9 @@ import arimaplus_math as ap_math
 
 
 def licz_reg_liniowa(okno, wejscie=[]):
+    """For a given list of numbers and a window frame,
+    slides the frame over sublist of input data
+    and returns linear regression coeficient one - for each frame."""
     baza = [n for n in range(0, int(okno))]
     output = []
     for i in range(0, int(len(wejscie) / okno) - 1):
@@ -16,6 +19,9 @@ def licz_reg_liniowa(okno, wejscie=[]):
 
 
 def licz_reg_wielomianiowa(okno, n, wejscie=[]):
+    """For a given list of numbers and a window frame,
+    slides the frame over sublist of input data
+    and returns polynomial regression coeficients for each frame."""
     baza = [n for n in range(0, len(okno))]
     output = []
     for i in range(0, len(wejscie / okno) - 1):
@@ -25,6 +31,9 @@ def licz_reg_wielomianiowa(okno, n, wejscie=[]):
 
 
 def roznicoj_dane(q, wejscie=[]):
+    """For a given list of numbers creates
+    a corresponding list of differenced data,
+    making data stationary (I in ARIMA)."""
     output = wejscie
     if q == 1:
         for i in range(1, len(output)):
@@ -42,10 +51,13 @@ def roznicoj_dane(q, wejscie=[]):
 
 
 def interpretuj_roznicowanie(q, wejscie=[]):
+    """Inverts the differencing process."""
     pass
 
 
 def ARIMA(p, d, cA, cB, cC, eA, eB, eC, wejscie=[]):
+    """Predicts data series values using ARIMA(p, q, d) model.
+    Returns list of pairs: output value, error."""
     rownanie = ""
     output = []
     error = []

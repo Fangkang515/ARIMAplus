@@ -1,7 +1,7 @@
 import  arimaplus_dna as dna
 import os.path
 
-#wczytaj plik
+#Read input data
 plik = os.path.expanduser("~/Documents/dane.csv")
 with open(plik) as f:
     dane = f.readlines()
@@ -9,7 +9,7 @@ dane = [x.strip() for x in dane]
 dane = [z.replace(',', '.') for z in dane]
 dane = list(map(float, dane))
 
-#czy jest kod genetyczny?
+#check for file with DNA code - if not find, create population and evaluate until winner organism emerges
 if os.path.isfile(os.path.expanduser("~/Documents/the_dna.txt")):
     with open(os.path.expanduser("~/Documents/the_dna.txt")) as f:
         to_dna = f.readline()
