@@ -7,6 +7,8 @@ import random
 
 
 class siec_zwykly(object):
+    """Class defines a neural network of classic neurons, for input of size okno,
+    topology specified in neurony dictionary"""
     def __init__(self, okno, neurony, typ_przewidywania, arima):
         self.warstwy = len(neurony)
         self.topologia = [[] for i in range(self.warstwy)]
@@ -31,6 +33,7 @@ class siec_zwykly(object):
         self.warstwy += 1
 
     def forward_pass(self, wejscie=[]):
+        """Executes a single forward pass on the network."""
         self.wynik = []
         for i in range(self.warstwy):
             if i == 0:
@@ -46,6 +49,8 @@ class siec_zwykly(object):
         return self.wynik
 
     def backward_pass(self, target, wsp_nauki, wejscie=[]):
+        """Executes a single learning iteration on the network,
+        given target value, learning speed, and input data."""
         for i in reversed(range(0, self.warstwy)):
             if i == self.warstwy - 1:
                 for j, cel in enumerate(target):
@@ -60,6 +65,7 @@ class siec_zwykly(object):
 
 
 class neuron_zwykly(object):
+    """Class defines a single neuron of classic design."""
     wynik = 0
 
     def __init__(self, okno):
@@ -71,6 +77,8 @@ class neuron_zwykly(object):
         self.waga_bias = 1 / random.randint(1, okno)
 
     def przelicz(self, wejscie=[]):
+        """Calculates output value of *this* neuron, given input
+        and using remembered wages."""
         self.suma = 0
         self.suma = sum(x * y for x, y in zip(self.wagi, wejscie))
         self.suma += self.bias * self.waga_bias
@@ -78,6 +86,7 @@ class neuron_zwykly(object):
         return wynik
 
     def nauka(self, cel, wsp_nauki, wejscie=[]):
+        """Executes single learnig pass."""
         self.d_wagi = []
         for i in range(len(wejscie)):
             self.d_wagi.append(0)
@@ -89,6 +98,8 @@ class neuron_zwykly(object):
 
 
 class siec_LSTM(object):
+    """Class defines a neural network of long-short term memory neurons, for input of size okno,
+    topology specified in neurony dictionary"""
     def __init__(self, okno, neurony, typ_przewidywania, arima):
         self.warstwy = len(neurony)
         self.topologia = [[] for i in range(self.warstwy)]
@@ -113,6 +124,7 @@ class siec_LSTM(object):
         self.warstwy += 1
 
     def forward_pass(self, wejscie=[]):
+        """Executes a single forward pass on the network."""
         self.wynik = []
         for i in range(self.warstwy):
             if i == 0:
@@ -126,6 +138,7 @@ class siec_LSTM(object):
                             self.topologia[i][j].przelicz([neuron_LSTM.wynik for w in self.topologia[i - 1]]))
 
     def backward_pass(self, target, wsp_nauki, wejscie=[]):
+        """Executes single learnig pass."""
         for i in reversed(self.warstwy):
             if i == self.warstwy - 1:
                 for j, cel in enumerate(target):
@@ -142,6 +155,7 @@ class siec_LSTM(object):
 
 
 class neuron_LSTM(object):
+    """Class defines a single neuron of long-short term memory type."""
     def __init__(self, okno):
         self.wagi = [[] for i in range(4)]
         self.waga_bias = []
@@ -158,6 +172,7 @@ class neuron_LSTM(object):
         self.waga_prev = 1 / random.randint(1, 4 * okno)
 
     def przelicz(self, wejscie=[]):
+        """Executes a single forward pass on a neuron."""
         self.y_prev = self.wynik
         self.stan = self.mem
         # ?? self.stan += self.mem
@@ -191,6 +206,7 @@ class neuron_LSTM(object):
         return self.wynik
 
     def nauka(self, cel, wsp_nauki, wejscie=[]):
+        """Executes a single learning pass on a neuron."""
         self.d_wagi = [[] for i in range(4)]
         for j in range(4):
             for i in range(len(wejscie)):
@@ -228,6 +244,8 @@ class neuron_LSTM(object):
 
 
 class siec_GRU(object):
+    """Class defines a neural network of Gated Recurent Units, for input of size okno,
+    topology specified in neurony dictionary"""
     def __init__(self, okno, neurony, typ_przewidywania, arima):
         self.warstwy = len(neurony)
         self.topologia = [[] for i in range(self.warstwy)]
@@ -252,6 +270,7 @@ class siec_GRU(object):
         self.warstwy += 1
 
     def forward_pass(self, wejscie=[]):
+        """Executes a single forward pass on the network."""
         self.wynik = []
         for i in range(self.warstwy):
             if i == 0:
@@ -265,6 +284,7 @@ class siec_GRU(object):
                             self.topologia[i][j].przelicz([neuron_GRU.wynik for w in self.topologia[i - 1]]))
 
     def backward_pass(self, target, wsp_nauki, wejscie=[]):
+        """Executes single learnig pass."""
         for i in reversed(self.warstwy):
             if i == len(self.warstwy) - 1:
                 for j, cel in enumerate(target):
@@ -281,6 +301,7 @@ class siec_GRU(object):
 
 
 class neuron_GRU(object):
+    """Class defines a Gated Recurent Unit."""
     def __init__(self, okno):
         self.wagi = [[] for i in range(3)]
         self.waga_bias = []
@@ -300,6 +321,7 @@ class neuron_GRU(object):
         self.waga_prev.append(1 / random.randint(1, 4 * okno))
 
     def przelicz(self, wejscie=[]):
+        """Executes a single forward pass on a neuron."""
         self.y_prev = self.wynik
 
         self.suma_zt = 0
@@ -328,6 +350,7 @@ class neuron_GRU(object):
         return self.wynik
 
     def nauka(self, cel, wsp_nauki, wejscie=[]):
+        """Executes a single learning pass on a neuron."""
         self.d_wagi = [[] for i in range(3)]
         for j in range(3):
             for i in range(len(wejscie)):

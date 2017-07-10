@@ -14,6 +14,9 @@ import struct
 
 
 class populacja(object):
+    """Class describes a population of organisms, each defined by DNA code;
+    each with purpose of predict future values of data series given past values of
+    this series."""
     def __init__(self):
         self.liczebnosc = 15
         self.dna_pokolenie = []
@@ -33,6 +36,8 @@ class populacja(object):
             self.dna_pokolenie.append(self.generuj_kod())
 
     def ewaluacja(self, dane_in=[]):
+        """Using list of dna codes, creates organisms and retrieves rmse
+        from each"""
         # otrzymując kody dna tworzy jednostki i doprowadza do uzyskania rmse
         self.wyniki = []
         for n in self.dna_pokolenie:
@@ -41,6 +46,11 @@ class populacja(object):
             self.wyniki.append(j.przewidywanie(dane_in))
 
     def anageneza(self, dane_in=[]):
+        """Judge organisms in current generation by their rmse.
+        Erase inefficient ones and reproduce the best pair,
+        while end conditions are not met.
+        End conditions are: number of generations reaching 50 or
+        sufficient rmse."""
         # sprawdza liczbę pokoleń (war. końcowy 1) lub rmse najlepszych - sortowanie - (war. końcowy 2)
         # przeprowadza mutacje i krzyżowanie oraz zapomnienie nieskutczenych
         self.srednie_rmse = sum([n.rmse for n in self.pokolenie]) / len(self.pokolenie)
@@ -64,6 +74,7 @@ class populacja(object):
             return False
 
     def generuj_kod(self):
+        """Generates one random DNA code."""
         kod = ""
         for i in range(0, 86):
             p = random.randint(0, 100)
@@ -71,11 +82,13 @@ class populacja(object):
         return kod
 
     def mutacja(self, kod):
+        """Mutates given DNA code with given probability of flipping bit of information."""
         for i, c in enumerate(kod):
             kod[i] = kod[i] if random.randint(0, len(kod)) != 0 else ("1" if kod[i] == "0" else "0")
         return kod
 
     def dziedziczenie(self, kodA, kodB):
+        """Returns DNA code as a product of two crossed codes."""
         self.kodC = ""
         self.ile_krzyzowan = random.randint(1, math.floor(self.liczebnosc / 2))
         self.pkt_krzyzowania = []
@@ -103,11 +116,13 @@ class populacja(object):
         return kodC
 
     def zapisz_dna(self):
+        """Saves best DNA in population o a file."""
         with open(os.path.expanduser("~/the_dna.txt")) as f:
             f.write(self.pokolenie[0])
 
 
 class jednostka(object):
+    """Class describes an organism, created from given DNA."""
     def __init__(self, dna):
         self.rmse = 0
         self.dane_in = []
@@ -167,8 +182,8 @@ class jednostka(object):
                 self.ile_warstw += 1
 
     def przewidywanie(self, dane=[]):
-        """Kompletne przewidywanie dla zestawu danych, od utworzenia
-        odpowiednich-ewentualnych sieci aż do wyznaczenia RMSE"""
+        """Given list of numbers and a dna creates one of possible solutions
+        and executes it. Returns predicted values, calculates own rmse."""
         while (len(dane) % self.typ_okno != 0):
             del dane[0]
 
@@ -298,9 +313,11 @@ class jednostka(object):
             return self.dane_out
 
     def jakie_roznicowanie(self):
+        """Returns int describing level of differencing using by this organism."""
         return self.typ_I
 
     def rysowanie(self, bity, *szeregi):
+        """Saves external bitmap file illustrating given and predicted data."""
         self.rowno4 = lambda n: int(math.ceil(n / 4)) * 4
         self.rowno8 = lambda n: int(math.ceil(n / 8)) * 8
         self.format_short = lambda n: struct.pack("<h", n)

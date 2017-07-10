@@ -6,6 +6,7 @@ import math
 
 
 def srednia(x=[]):
+    """Given a list of numbers, returns their mean value."""
     suma = 0.0
     for el in x:
         suma += el
@@ -13,6 +14,7 @@ def srednia(x=[]):
 
 
 def minimum(x=[]):
+    """Returns a minimum value from a list of numbers."""
     wynik = x[0]
     for i in range(len(x)):
         wynik = x[i] if x[i] < wynik else wynik
@@ -20,6 +22,7 @@ def minimum(x=[]):
 
 
 def maksimum(x=[]):
+    """Returns a maximum value from a list of numbers."""
     wynik = x[0]
     for i in range(len(x)):
         wynik = x[i] if x[i] > wynik else wynik
@@ -27,17 +30,20 @@ def maksimum(x=[]):
 
 
 def normalizuj(x=[]):
+    """Given a list of numbers, returns a normalized <0 1> list."""
     min = minimum(x)
     maks = maksimum(x)
     return [(n - min) / (maks - min) for n in x]
 
 
 def odchylenie(x=[]):
+    """Returns standard deviation for a given list of numbers."""
     mem = srednia(x)
     return (1 / (len(x) - 1)) * math.sqrt(sum((el - mem) * (el - mem) for el in x))
 
 
 def korelacja(x=[], y=[]):
+    """Returns Pearson's product-moment coefficient for two list of numbers."""
     memx = srednia(x)
     memy = srednia(y)
     return sum((elx - memx) * (ely - memy) for elx, ely in zip(x, y)) / odchylenie(y) * odchylenie(x) * (
@@ -45,11 +51,15 @@ def korelacja(x=[], y=[]):
 
 
 def regresja_liniowa(x=[], y=[]):
+    """Returns aproximated a0 coeficient for given two lists of numvers,
+    where a0 fits the y = a0*x+a1 model.  """
+
     return korelacja(x, y) * odchylenie(y) / odchylenie(x)
 
 
 def wyznacznik(M, n):
-    """determinant calculated using LU decomposition"""
+    """Matrix determinant calculated using LU decomposition, for given two-dimensional square matrix
+    M with order of n. """
     L = [[] for i in range(n)]
     U = [[] for i in range(n)]
     for i in range(n):
@@ -74,9 +84,9 @@ def wyznacznik(M, n):
     return detU * detL
 
 
-def regresja_wielomianowa(x, y, n):
-    """n ~ order of polynomial
-    a_n*x^n + ... + a_0*x"""
+def regresja_wielomianowa(x = [], y = [], n = 2):
+    """Given lists of numbers and desired degree of polynomial,
+    returns a list of coefficients of aproximated polynomial."""
     wynik = []
     M = [[] for i in range(n)]
     My = []
@@ -100,30 +110,38 @@ def regresja_wielomianowa(x, y, n):
 
 
 def rmse(x=[], y=[]):
+    """For two lists of numbers, returns root-mean-square error of how
+    different are coresponding elements of the lists."""
     return math.sqrt(sum([(a - b) ** 2 for a, b in zip(x, y)]) / len(x))
 
 
 def tanh(x):
+    """Returns a value of hyperbolic tangent for a given number."""
     return 2 / (1 + math.exp(-2 * x)) - 1
 
 
 def pochodna_tanh(x):
+    """Returns a value of derivative of hyperbolic tangent for a given number."""
     mem = tanh(x)
     return 1 - (mem * mem)
 
 
 def sigmoid(x):
+    """Returns a value of sigmoid function for a given number."""
     return 1 / (1 + math.exp(-x))
 
 
 def pochodna_sigmoid(x):
+    """Returns a value of derivative of sigmoid function for a given number."""
     mem = sigmoid(x)
     return mem * (1 - mem)
 
 
 def bent(x):
+    """Returns a value of bent identity function for a given number."""
     return (math.sqrt(x * x + 1) - 1) / 2 + x
 
 
 def pochodna_bent(x):
+    """Returns a value of derivative of bent identity for a given number."""
     return x / (2 * math.sqrt(x * x + 1)) + 1
