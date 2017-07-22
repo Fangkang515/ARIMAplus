@@ -52,16 +52,29 @@ class siec_zwykly(object):
         """Executes a single learning iteration on the network,
         given target value, learning speed, and input data."""
         for i in reversed(range(0, self.warstwy)):
-            if i == self.warstwy - 1:
-                for j, cel in enumerate(target):
-                    self.topologia[i][j].nauka(cel, wsp_nauki, [neuron_zwykly.wynik for w in self.topologia[i - 1]])
-            elif i == 0:
-                for j in self.topologia[i]:
+            #if type(target) is not float:
+            try:
+                if i == self.warstwy - 1:
+                    for j, cel in enumerate(target):
+                        self.topologia[i][j].nauka(cel, wsp_nauki, [neuron_zwykly.wynik for w in self.topologia[i - 1]])
+                elif i == 0:
+                    for j in self.topologia[i]:
+                        self.topologia[i][j].nauka(sum([neuron_zwykly.d_wagi for w in self.topologia[i + 1]]), wsp_nauki,
+                                                   wejscie)
+                else:
                     self.topologia[i][j].nauka(sum([neuron_zwykly.d_wagi for w in self.topologia[i + 1]]), wsp_nauki,
-                                               wejscie)
-            else:
-                self.topologia[i][j].nauka(sum([neuron_zwykly.d_wagi for w in self.topologia[i + 1]]), wsp_nauki,
-                                           [neuron_zwykly.wynik for w in self.topologia[i - 1]])
+                                               [neuron_zwykly.wynik for w in self.topologia[i - 1]])
+            except TypeError:
+                if i == self.warstwy - 1:
+                    self.topologia[i][0].nauka(cel, wsp_nauki, [neuron_zwykly.wynik for w in self.topologia[i - 1]])
+                elif i == 0:
+                    for j in self.topologia[i]:
+                        self.topologia[i][j].nauka(sum([neuron_zwykly.d_wagi for w in self.topologia[i + 1]]),
+                                                   wsp_nauki,
+                                                   wejscie)
+                else:
+                    self.topologia[i][j].nauka(sum([neuron_zwykly.d_wagi for w in self.topologia[i + 1]]), wsp_nauki,
+                                               [neuron_zwykly.wynik for w in self.topologia[i - 1]])
 
 
 class neuron_zwykly(object):
