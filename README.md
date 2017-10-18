@@ -1,5 +1,6 @@
 # ARIMAplus
-Small project aimed to find the best model for predicting values for a given set of data. 
+Small project aimed to find the best model for predicting values for a given set of data. I'm working on it in hope to better understand
+forecasting techniques and statistics, alongside with genetic algorithms and neural networks.
 
 ###### What is going on:
 Chosen CSV file is loaded. The file is expected to contain numbers one-number-for-a-line.
